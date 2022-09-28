@@ -1,13 +1,13 @@
 #!/bin/bash
 ##############################################################
 # Usage ( * = optional ):                                    #
-# ./script.sh <db-address> <db-port> *<username> *<password> #
+# ./script.sh <db-uri> *<username> *<password> #
 ##############################################################
 
-if [ ! -z "$3" ]; then
-    if [ ! -z "$4" ]; then
+if [ ! -z "$2" ]; then
+    if [ ! -z "$3" ]; then
         echo "Using password authentication!"
-        auth="--authenticationDatabase admin -u $3 -p $4"
+        auth="--authenticationDatabase admin -u $2 -p $3"
     fi
 fi
 
@@ -15,7 +15,7 @@ for coll in *; do
     if [ -d "${coll}" ] ; then
         echo "$coll"
         for file in $coll/*; do
-            mongoimport --drop --host $1 --port $2 --db "$coll" --collection "$(basename $file .json)" --file $file $auth
+            mongoimport --drop --uri "$1" --db "$coll" --collection "$(basename $file .json)" --file $file $auth
             #echo "$(basename $file .json)"
             #echo "$file"
         done
